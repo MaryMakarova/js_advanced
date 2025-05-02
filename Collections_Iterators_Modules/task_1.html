@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Музыкальная коллекция</h1>
+    <ul id="albumList"></ul>
+
+    <script>
+        const musicCollection = {
+            albums: [
+                { title: "Abbey Road", artist: "The Beatles", year: 1969 },
+                { title: "Thriller", artist: "Michael Jackson", year: 1982 },
+                { title: "Back in Black", artist: "AC/DC", year: 1980 },
+                { title: "The Dark Side of the Moon", artist: "Pink Floyd", year: 1973 }
+            ],
+
+            [Symbol.iterator]() {
+                let index = 0;
+                const albums = this.albums;
+                return {
+                    next() {
+                        if (index < albums.length) {
+                            return { value: albums[index++], done: false };
+                        } else {
+                            return { done: true };
+                        }
+                    }
+                };
+            }
+        };
+
+        const albumList = document.getElementById('albumList');
+
+        for (const album of musicCollection) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${album.title} - ${album.artist} (${album.year})`;
+            albumList.appendChild(listItem);
+            console.log(`${album.title} - ${album.artist} (${album.year})`);
+        }
+    </script>
+</body>
+
+</html>

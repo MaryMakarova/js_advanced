@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Заказы клиентов</h2>
+    <div id="ordersOutput"></div>
+
+
+    <script>
+
+        const cooks = {
+            Виктор: "Пицца",
+            Ольга: "Суши",
+            Дмитрий: "Десерты"
+        };
+
+        const dishToCook = new Map([
+            ["Пицца Маргарита", "Виктор"],
+            ["Пицца Пепперони", "Виктор"],
+            ["Суши Филадельфия", "Ольга"],
+            ["Суши Калифорния", "Ольга"],
+            ["Тирамису", "Дмитрий"],
+            ["Чизкейк", "Дмитрий"]
+        ]);
+
+        const clientAlexey = { name: "Алексей" };
+        const clientMaria = { name: "Мария" };
+        const clientIrina = { name: "Ирина" };
+
+        const clientOrders = new Map([
+            [clientAlexey, ["Пицца Пепперони", "Тирамису"]],
+            [clientMaria, ["Суши Калифорния", "Пицца Маргарита"]],
+            [clientIrina, ["Чизкейк"]]
+        ]);
+
+        //console.log(clientOrders)
+
+        const outputDiv = document.getElementById('ordersOutput');
+
+        for (const [client, dishes] of clientOrders) {
+            const clientInfo = document.createElement('p');
+            clientInfo.textContent = `Клиент ${client.name} заказал(а):`;
+            outputDiv.appendChild(clientInfo);
+
+            const dishList = document.createElement('ul');
+            for (const dish of dishes) {
+                const cook = dishToCook.get(dish);
+                const cookName = cook;
+                const cookSpecialty = cooks[cook];
+                const li = document.createElement('li');
+                li.textContent = `${dish} — готовит ${cookName} (специализация: ${cookSpecialty})`;
+                dishList.appendChild(li);
+                console.log(`${client.name} заказал ${dish}, его готовит ${cookName} (${cookSpecialty})`);
+            }
+
+            outputDiv.appendChild(dishList);
+        }
+
+    </script>
+</body>
+
+</html>
