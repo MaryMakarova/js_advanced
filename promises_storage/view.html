@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .product {
+            cursor: pointer;
+            color: blue;
+            margin-bottom: 5px;
+        }
+
+        .review {
+            margin-left: 20px;
+        }
+
+        button {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Отзывы о продуктах</h1>
+
+    <div id="productList"></div>
+    <div id="reviewList"></div>
+
+    <p><a href="add.html">Добавить отзыв</a></p>
+
+    <script>
+        function loadData() {
+            const data = JSON.parse(localStorage.getItem('reviews') || '{}');
+            return Promise.resolve(data);
+        }
+
+        function renderProducts(data) {
+            const container = document.getElementById('productList');
+            container.innerHTML = '<h2>Продукты:</h2>';
+
+            Object.keys(data).forEach(product => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                div.textContent = product;
+                div.onclick = () => renderReviews(product, data[product]);
+                container.appendChild(div);
+            });
+        }
+
+        function renderReviews(product, reviews) {
+            const container = document.getElementById('reviewList');
+            container.innerHTML = `<h3>Отзывы для "${product}"</h3>`;
+
+            reviews.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'review';
+                div.textContent = r.text;
+
+                const btn = document.createElement('button');
+                btn.textContent = 'Удалить';
+                btn.onclick = () => deleteReview(product, r.id);
+
+                div.appendChild(btn);
+                container.appendChild(div);
+            });
+        }
+
+        function deleteReview(product, id) {
+            const data = JSON.parse(localStorage.getItem('reviews') || '{}');
+            if (!data[product]) return;
+
+            data[product] = data[product].filter(r => r.id !== id);
+
+            if (data[product].length === 0) {
+                delete data[product];
+            }
+
+            localStorage.setItem('reviews', JSON.stringify(data));
+            location.reload();
+        }
+
+        loadData().then(data => {
+            renderProducts(data);
+        });
+    </script>
+
+</body>
+
+</html>
